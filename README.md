@@ -1,0 +1,1 @@
+- run `cmd/local_setup.sh` from root directory to run the server locally

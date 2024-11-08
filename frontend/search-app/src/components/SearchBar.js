@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./SearchBar.css";
+import CourseBlueprint from "./CourseBlueprint";
 
 function SearchBar() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -8,13 +9,10 @@ function SearchBar() {
 
   const handleSearch = async () => {
     try {
-      const response = await axios.post(
-        "http://127.0.0.1:5000/api/generate_course",
-        {
-          prompt: searchQuery,
-        }
-      );
-      setResult(response.data.response);
+      const response = await axios.get("http://127.0.0.1:5000/generate", {
+        params: { input_text: searchQuery },
+      });
+      setResult(response.data.output); // Adjust to match the response structure
     } catch (error) {
       console.error("Error:", error);
       setResult("An error occurred while searching");
@@ -33,7 +31,7 @@ function SearchBar() {
       <button onClick={handleSearch} className="search-button">
         Search
       </button>
-      {result && <pre className="result">{result}</pre>}
+      {result && <CourseBlueprint data={result} />}
     </div>
   );
 }
