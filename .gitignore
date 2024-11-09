@@ -9,24 +9,14 @@ frontend/npm-debug.log*
 frontend/yarn-debug.log*
 frontend/yarn-error.log*
 
-# Backend (Python/Flask)
-backend/__pycache__/
-backend/*.py[cod]
-backend/.Python
-backend/venv/
-backend/.venv/
-backend/env/
-backend/ENV/
-backend/.pytest_cache/
-backend/.mypy_cache/
-backend/.coverage
-backend/htmlcov/
-backend/.tox/
-backend/coverage.xml
-backend/instance/
-backend/*.egg-info/
-backend/.ipynb_checkpoints
-backend/cython_debug/
+# Backend (Golang)
+backend/*.exe
+backend/*.test
+backend/.env
+backend/tmp/
+backend/logs/
+backend/.vscode/
+backend/debug/
 
 # Infrastructure (Terraform)
 infra/.terraform/

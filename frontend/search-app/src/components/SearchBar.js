@@ -9,9 +9,12 @@ function SearchBar() {
 
   const handleSearch = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:5000/generate", {
-        params: { input_text: searchQuery },
-      });
+      const response = await axios.get(
+        "http://127.0.0.1:5000/generate_course",
+        {
+          params: { input_text: searchQuery },
+        }
+      );
       setResult(response.data.output); // Adjust to match the response structure
     } catch (error) {
       console.error("Error:", error);
