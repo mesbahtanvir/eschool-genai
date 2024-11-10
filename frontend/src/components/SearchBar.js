@@ -9,12 +9,12 @@ function SearchBar() {
 
   // Retrieve the base URL from the environment variable
   const backendUrl =
-    process.env.REACT_APP_BACKEND_URL || "http://127.0.0.1:5000"; // Default to localhost if not set
+    process.env.REACT_APP_BACKEND_URL || "http://localhost:8080"; // Default to localhost if not set
 
   const handleSearch = async () => {
     try {
-      const response = await axios.get(`${backendUrl}/generate_course`, {
-        params: { input_text: searchQuery },
+      const response = await axios.get(`${backendUrl}/course/generate`, {
+        params: { course_hint: searchQuery },
       });
       setResult(response.data.output); // Adjust to match the response structure
     } catch (error) {

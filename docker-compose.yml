@@ -1,34 +1,40 @@
-version: "3.8"
-
 services:
   mongodb:
     image: mongo:latest
     container_name: mongodb
     ports:
-      - "27017:27017" # Expose MongoDB on the host machine
+      - "27017:27017"
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
 
   backend:
     build:
-      context: ./backend # Directory where the Go backend Dockerfile is located
+      context: ./backend
     container_name: backend
     ports:
       - "8080:8080"
-    environment:
-      MONGO_URI: mongodb://root:example@mongodb:27017/mydatabase # MongoDB URI with database name included
-      DB_NAME: mydatabase
+    env_file:
+      - ./backend/.env
     depends_on:
       - mongodb
+    networks:
+      - app-network
 
   frontend:
     build:
-      context: ./frontend # Directory where the React frontend Dockerfile is located
+      context: ./frontend
     container_name: frontend
     ports:
-      - "3000:80" # Expose the frontend on host port 3000
+      - "3000:80"
     environment:
-      - REACT_APP_BACKEND_URL=http://backend:8080 # Pass backend URL to React
+      # somehow http://backend:8080 doesn't work
+      - REACT_APP_BACKEND_URL=http://localhost:8080
     depends_on:
       - backend
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

@@ -27,12 +27,12 @@ func GenerateCourse(c *gin.Context) {
 	}
 
 	// Save the course to the database
-	if err := storage.SaveCourse(course); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save course"})
-		return
-	}
+	// if err := storage.SaveCourse(course); err != nil {
+	// 	c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save course"})
+	// 	return
+	// }
 
-	c.JSON(http.StatusOK, course)
+	c.JSON(http.StatusOK, gin.H{"course": course})
 }
 
 func EnrollCourse(c *gin.Context) {
