@@ -8,7 +8,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SetupCourseRoutes(router *gin.Engine) {
+type MongoStorage interface {
+}
+
+type RouterSetup struct {
+	storage MongoStorage
+}
+
+func NewRouterSetup(storage MongoStorage) RouterSetup {
+	return RouterSetup{storage: storage}
+}
+
+func (RouterSetup) SetupCourseRoutes(router *gin.Engine) {
 
 	// Configure CORS settings
 	router.Use(cors.New(cors.Config{

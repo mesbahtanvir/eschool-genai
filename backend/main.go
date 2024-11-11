@@ -3,15 +3,12 @@ package main
 import (
 	"backend/routes"
 	"backend/storage"
-	"log"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	if err := storage.InitDatabase(); err != nil {
-		log.Fatal("Failed to initialize database:", err)
-	}
+	mongoStorage := storage.NewMustMongoDatabaseHandler()
 
 	router := gin.Default()
 

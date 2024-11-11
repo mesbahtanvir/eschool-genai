@@ -11,6 +11,13 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
+type Controller struct {
+}
+
+func NewController() Controller {
+	return Controller{}
+}
+
 func GenerateCourse(c *gin.Context) {
 	courseHint := c.Query("course_hint")
 

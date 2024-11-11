@@ -13,7 +13,14 @@ import (
 	"github.com/openai/openai-go/option"
 )
 
-func GenerateCourseBlueprint(courseHint string) (*models.CourseBlueprint, error) {
+type OpenAIService struct {
+}
+
+func NewOpenAIService() OpenAIService {
+	return OpenAIService{}
+}
+
+func (OpenAIService) GenerateCourseBlueprint(courseHint string) (*models.CourseBlueprint, error) {
 	client := openai.NewClient(option.WithAPIKey(os.Getenv("OPENAI_API_KEY")))
 
 	// Generate prompt
