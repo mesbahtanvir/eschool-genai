@@ -16,7 +16,8 @@ function SearchBar() {
       const response = await axios.get(`${backendUrl}/course/generate`, {
         params: { course_hint: searchQuery },
       });
-      setResult(response.data.output); // Adjust to match the response structure
+      console.log(response);
+      setResult(response.data); // Adjust to match the response structure
     } catch (error) {
       console.error("Error:", error);
       setResult("An error occurred while searching");
