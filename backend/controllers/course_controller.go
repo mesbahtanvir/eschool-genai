@@ -9,6 +9,8 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
+//go:generate mockgen -source=./course_controller.go -destination=./mocks/course_controller.go -package=mocks
+
 type Storage interface {
 	EnrollUserInCourse(userID string, courseID string) error
 	GetCourse(courseID string) (*models.Course, error)

@@ -9,6 +9,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+//go:generate mockgen -source=./course.go -destination=./mocks/course.go -package=mocks
+
 type Storage interface {
 	EnrollUserInCourse(userID string, courseID string) error
 	GetCourse(courseID string) (*models.Course, error)
