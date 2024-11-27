@@ -6,7 +6,6 @@ import (
 	"os"
 	"time"
 
-	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -48,41 +47,45 @@ func NewMustMongoDatabaseHandler() MongoDatabaseHandler {
 }
 
 func (mongo MongoDatabaseHandler) SaveCourse(course models.Course) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
+	// ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	// defer cancel()
 
-	_, err := mongo.courseCollection.InsertOne(ctx, course)
-	if err != nil {
-		return err
-	}
+	// _, err := mongo.courseCollection.InsertOne(ctx, course)
+	// if err != nil {
+	// 	return err
+	// }
+	return nil
+}
+
+func (mongo MongoDatabaseHandler) UserKnowledge(course models.Course) error {
 	return nil
 }
 
 func (mongo MongoDatabaseHandler) EnrollUserInCourse(userID, courseID string) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
+	// ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	// defer cancel()
 
-	// Update the user's enrolled courses array
-	filter := bson.M{"user_id": userID}
-	update := bson.M{
-		"$addToSet": bson.M{"enrolled_courses": courseID}, // add courseID to enrolled_courses array
-	}
+	// // Update the user's enrolled courses array
+	// filter := bson.M{"user_id": userID}
+	// update := bson.M{
+	// 	"$addToSet": bson.M{"enrolled_courses": courseID}, // add courseID to enrolled_courses array
+	// }
 
-	_, err := mongo.userCollection.UpdateOne(ctx, filter, update)
-	if err != nil {
-		return err
-	}
+	// _, err := mongo.userCollection.UpdateOne(ctx, filter, update)
+	// if err != nil {
+	// 	return err
+	// }
 	return nil
 }
 
 func (mongo MongoDatabaseHandler) GetCourse(courseID string) (*models.Course, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
+	// ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	// defer cancel()
 
 	var course models.Course
-	err := mongo.courseCollection.FindOne(ctx, bson.M{"course_id": courseID}).Decode(&course)
-	if err != nil {
-		return nil, err
-	}
+	// err := mongo.courseCollection.FindOne(ctx, bson.M{"course_id": courseID}).Decode(&course)
+	// if err != nil {
+	// 	return nil, err
+	// }
 	return &course, nil
 }

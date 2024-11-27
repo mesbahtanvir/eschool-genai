@@ -15,10 +15,11 @@ type Storage interface {
 	EnrollUserInCourse(userID string, courseID string) error
 	GetCourse(courseID string) (*models.Course, error)
 	SaveCourse(course models.Course) error
+	UserKnowledge(userID string) (string, error)
 }
 
 type LLM interface {
-	GenerateCourseBlueprint(courseHint string) (*models.CourseBlueprint, error)
+	GenerateCourseBlueprint(courseHint string, userKnowledge string) (*models.CourseBlueprint, error)
 }
 
 type Controller struct {
@@ -38,8 +39,15 @@ func NewController(
 
 func (controller Controller) GenerateCourse(c *gin.Context) {
 	courseHint := c.Query("course_hint")
+	userID := c.Query("user_id")
 
-	blueprint, err := controller.llm.GenerateCourseBlueprint(courseHint)
+	userKnowledge, err := controller.storage.UserKnowledge(userID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrive user knowledge"})
+		return
+	}
+
+	blueprint, err := controller.llm.GenerateCourseBlueprint(courseHint, userKnowledge)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate course blueprint"})
 		return
@@ -52,10 +60,10 @@ func (controller Controller) GenerateCourse(c *gin.Context) {
 	}
 
 	// Save the course to the database
-	// if err := storage.SaveCourse(course); err != nil {
-	// 	c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save course"})
-	// 	return
-	// }
+	if err := controller.storage.SaveCourse(course); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save course"})
+		return
+	}
 
 	c.JSON(http.StatusOK, gin.H{"course": course})
 }

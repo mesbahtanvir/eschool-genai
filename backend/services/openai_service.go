@@ -24,13 +24,14 @@ func NewOpenAIService() OpenAIService {
 	}
 }
 
-func (oas OpenAIService) GenerateCourseBlueprint(courseHint string) (*models.CourseBlueprint, error) {
+func (oas OpenAIService) GenerateCourseBlueprint(courseHint string, userKnowledge string) (*models.CourseBlueprint, error) {
 
 	// Generate prompt
 	prompt := fmt.Sprintf(
-		"Generate a course for: %s, where the user does not have any background knowledge on this. "+
+		"Generate a course for: %s, where the user have the knowledge %s. "+
 			"The response should be in JSON format like this: %s, just raw json text",
 		courseHint,
+		userKnowledge,
 		GetStructMetadata(models.CourseBlueprint{}),
 	)
 
