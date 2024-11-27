@@ -2,8 +2,6 @@ package controllers
 
 import (
 	"backend/models"
-	"backend/services"
-	"backend/storage"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -11,17 +9,35 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
+type Storage interface {
+	EnrollUserInCourse(userID string, courseID string) error
+	GetCourse(courseID string) (*models.Course, error)
+	SaveCourse(course models.Course) error
+}
+
+type LLM interface {
+	GenerateCourseBlueprint(courseHint string) (*models.CourseBlueprint, error)
+}
+
 type Controller struct {
+	storage Storage
+	llm     LLM
 }
 
-func NewController() Controller {
-	return Controller{}
+func NewController(
+	storage Storage,
+	llm LLM,
+) Controller {
+	return Controller{
+		storage: storage,
+		llm:     llm,
+	}
 }
 
-func GenerateCourse(c *gin.Context) {
+func (controller Controller) GenerateCourse(c *gin.Context) {
 	courseHint := c.Query("course_hint")
 
-	blueprint, err := services.GenerateCourseBlueprint(courseHint)
+	blueprint, err := controller.llm.GenerateCourseBlueprint(courseHint)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate course blueprint"})
 		return
@@ -42,20 +58,20 @@ func GenerateCourse(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"course": course})
 }
 
-func EnrollCourse(c *gin.Context) {
+func (controller Controller) EnrollCourse(c *gin.Context) {
 	userID := c.Query("user_id")
 	courseID := c.Query("course_id")
 
 	// Append courseID to user's enrolled courses in object storage
-	storage.EnrollUserInCourse(userID, courseID)
+	controller.storage.EnrollUserInCourse(userID, courseID)
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }
 
-func GetCourse(c *gin.Context) {
+func (controller Controller) GetCourse(c *gin.Context) {
 	courseID := c.Query("course_id")
 
 	// Retrieve the course from storage
-	course, err := storage.GetCourse(courseID)
+	course, err := controller.storage.GetCourse(courseID)
 	if err != nil {
 		// Check if the error is due to the course not being found
 		if err == mongo.ErrNoDocuments {

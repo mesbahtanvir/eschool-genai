@@ -2,24 +2,33 @@ package routes
 
 import (
 	"backend/controllers"
+	"backend/models"
 	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
-type MongoStorage interface {
+type Storage interface {
+	EnrollUserInCourse(userID string, courseID string) error
+	GetCourse(courseID string) (*models.Course, error)
+	SaveCourse(course models.Course) error
+}
+
+type LLM interface {
+	GenerateCourseBlueprint(courseHint string) (*models.CourseBlueprint, error)
 }
 
 type RouterSetup struct {
-	storage MongoStorage
+	controller controllers.Controller
 }
 
-func NewRouterSetup(storage MongoStorage) RouterSetup {
-	return RouterSetup{storage: storage}
+func NewRouterSetup(storage Storage, llm LLM) RouterSetup {
+	controller := controllers.NewController(storage, llm)
+	return RouterSetup{controller: controller}
 }
 
-func (RouterSetup) SetupCourseRoutes(router *gin.Engine) {
+func (routerSetup RouterSetup) SetupCourseRoutes(router *gin.Engine) {
 
 	// Configure CORS settings
 	router.Use(cors.New(cors.Config{
@@ -33,8 +42,8 @@ func (RouterSetup) SetupCourseRoutes(router *gin.Engine) {
 
 	courseGroup := router.Group("/course")
 	{
-		courseGroup.GET("/generate", controllers.GenerateCourse)
-		courseGroup.POST("/enroll", controllers.EnrollCourse)
-		courseGroup.GET("/get", controllers.GetCourse)
+		courseGroup.GET("/generate", routerSetup.controller.GenerateCourse)
+		courseGroup.POST("/enroll", routerSetup.controller.EnrollCourse)
+		courseGroup.GET("/get", routerSetup.controller.GetCourse)
 	}
 }

@@ -14,14 +14,17 @@ import (
 )
 
 type OpenAIService struct {
+	openAIClient *openai.Client
 }
 
 func NewOpenAIService() OpenAIService {
-	return OpenAIService{}
+	client := openai.NewClient(option.WithAPIKey(os.Getenv("OPENAI_API_KEY")))
+	return OpenAIService{
+		openAIClient: client,
+	}
 }
 
-func (OpenAIService) GenerateCourseBlueprint(courseHint string) (*models.CourseBlueprint, error) {
-	client := openai.NewClient(option.WithAPIKey(os.Getenv("OPENAI_API_KEY")))
+func (oas OpenAIService) GenerateCourseBlueprint(courseHint string) (*models.CourseBlueprint, error) {
 
 	// Generate prompt
 	prompt := fmt.Sprintf(
@@ -33,7 +36,7 @@ func (OpenAIService) GenerateCourseBlueprint(courseHint string) (*models.CourseB
 
 	// Log the prompt that will be sent to OpenAI
 	log.Printf("OpenAI Request Prompt: %s", prompt)
-	chatCompletion, err := client.Chat.Completions.New(context.TODO(), openai.ChatCompletionNewParams{
+	chatCompletion, err := oas.openAIClient.Chat.Completions.New(context.TODO(), openai.ChatCompletionNewParams{
 		Messages: openai.F([]openai.ChatCompletionMessageParamUnion{
 			openai.UserMessage(prompt),
 		}),
