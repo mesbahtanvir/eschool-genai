@@ -1,0 +1,43 @@
+name: Go Backend CI
+
+on:
+  push:
+    branches:
+      - main # Adjust to your preferred branch
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  golang-ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout code
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Step 2: Set up Go environment
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.21 # Adjust to the Go version you're using
+
+      # Step 3: Install linters and dependencies
+      - name: Install golangci-lint and dependencies
+        run: |
+          cd backend
+          go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+          go mod tidy
+
+      # Step 4: Run linter
+      - name: Run golangci-lint
+        run: |
+          cd backend
+          golangci-lint run
+
+      # Step 5: Run tests
+      - name: Run tests
+        run: |
+          cd backend
+          go test ./... -v
