@@ -57,7 +57,7 @@ func (mongo MongoDatabaseHandler) SaveCourse(course models.Course) error {
 	return nil
 }
 
-func (mongo MongoDatabaseHandler) UserKnowledge(course models.Course) error {
+func (mongo MongoDatabaseHandler) UserKnowledge(course string) error {
 	return nil
 }
 

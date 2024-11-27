@@ -15,10 +15,11 @@ type Storage interface {
 	EnrollUserInCourse(userID string, courseID string) error
 	GetCourse(courseID string) (*models.Course, error)
 	SaveCourse(course models.Course) error
+	UserKnowledge(userID string) (string, error)
 }
 
 type LLM interface {
-	GenerateCourseBlueprint(courseHint string) (*models.CourseBlueprint, error)
+	GenerateCourseBlueprint(courseHint string, userknoweldge string) (*models.CourseBlueprint, error)
 }
 
 type RouterSetup struct {

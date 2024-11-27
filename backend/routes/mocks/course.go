@@ -77,6 +77,21 @@ func (mr *MockStorageMockRecorder) SaveCourse(course interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SaveCourse", reflect.TypeOf((*MockStorage)(nil).SaveCourse), course)
 }
 
+// UserKnowledge mocks base method.
+func (m *MockStorage) UserKnowledge(userID string) (string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UserKnowledge", userID)
+	ret0, _ := ret[0].(string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UserKnowledge indicates an expected call of UserKnowledge.
+func (mr *MockStorageMockRecorder) UserKnowledge(userID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UserKnowledge", reflect.TypeOf((*MockStorage)(nil).UserKnowledge), userID)
+}
+
 // MockLLM is a mock of LLM interface.
 type MockLLM struct {
 	ctrl     *gomock.Controller
@@ -101,16 +116,16 @@ func (m *MockLLM) EXPECT() *MockLLMMockRecorder {
 }
 
 // GenerateCourseBlueprint mocks base method.
-func (m *MockLLM) GenerateCourseBlueprint(courseHint string) (*models.CourseBlueprint, error) {
+func (m *MockLLM) GenerateCourseBlueprint(courseHint, userknoweldge string) (*models.CourseBlueprint, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GenerateCourseBlueprint", courseHint)
+	ret := m.ctrl.Call(m, "GenerateCourseBlueprint", courseHint, userknoweldge)
 	ret0, _ := ret[0].(*models.CourseBlueprint)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GenerateCourseBlueprint indicates an expected call of GenerateCourseBlueprint.
-func (mr *MockLLMMockRecorder) GenerateCourseBlueprint(courseHint interface{}) *gomock.Call {
+func (mr *MockLLMMockRecorder) GenerateCourseBlueprint(courseHint, userknoweldge interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GenerateCourseBlueprint", reflect.TypeOf((*MockLLM)(nil).GenerateCourseBlueprint), courseHint)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GenerateCourseBlueprint", reflect.TypeOf((*MockLLM)(nil).GenerateCourseBlueprint), courseHint, userknoweldge)
 }
