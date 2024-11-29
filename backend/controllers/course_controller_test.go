@@ -31,8 +31,10 @@ func TestGenerateCourse(t *testing.T) {
 			name:       "Success",
 			courseHint: "AI",
 			setupMocks: func(mockStorage *mocks.MockStorage, mockLLM *mocks.MockLLM) {
-				mockStorage.EXPECT().UserKnowledge(gomock.Any()).Return("Prior knowledge", nil)
+				mockStorage.EXPECT().UserKnowledge(gomock.Any()).Return("Prior Knowledge", nil)
 				mockLLM.EXPECT().GenerateCourseBlueprint("AI", "Prior Knowledge").Return(&models.CourseBlueprint{Title: "Intro to AI"}, nil)
+				//mockStorage.EXPECT().SaveCourse(models.Course{CourseID: gomock.Any().String(), CourseBlueprint: models.CourseBlueprint{Title: "Intro to AI"}})
+				mockStorage.EXPECT().SaveCourse(gomock.Any())
 			},
 			expectedCode: http.StatusOK,
 			expectedBody: map[string]interface{}{
