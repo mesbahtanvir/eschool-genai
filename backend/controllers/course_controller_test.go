@@ -23,14 +23,15 @@ func TestGenerateCourse(t *testing.T) {
 	tests := []struct {
 		name         string
 		courseHint   string
-		setupMocks   func(*mocks.MockLLM)
+		setupMocks   func(*mocks.MockStorage, *mocks.MockLLM)
 		expectedCode int
 		expectedBody map[string]interface{}
 	}{
 		{
 			name:       "Success",
 			courseHint: "AI",
-			setupMocks: func(mockLLM *mocks.MockLLM) {
+			setupMocks: func(mockStorage *mocks.MockStorage, mockLLM *mocks.MockLLM) {
+				mockStorage.EXPECT().UserKnowledge(gomock.Any()).Return("Prior knowledge", nil)
 				mockLLM.EXPECT().GenerateCourseBlueprint("AI", "Prior Knowledge").Return(&models.CourseBlueprint{Title: "Intro to AI"}, nil)
 			},
 			expectedCode: http.StatusOK,
@@ -48,7 +49,8 @@ func TestGenerateCourse(t *testing.T) {
 		{
 			name:       "LLM Failure",
 			courseHint: "AI",
-			setupMocks: func(mockLLM *mocks.MockLLM) {
+			setupMocks: func(mockStorage *mocks.MockStorage, mockLLM *mocks.MockLLM) {
+				mockStorage.EXPECT().UserKnowledge(gomock.Any()).Return("Prior Knowledge", nil)
 				mockLLM.EXPECT().GenerateCourseBlueprint("AI", "Prior Knowledge").Return(nil, errors.New("failed"))
 			},
 			expectedCode: http.StatusInternalServerError,
@@ -62,8 +64,7 @@ func TestGenerateCourse(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			mockLLM := mocks.NewMockLLM(ctrl)
 			mockStorage := mocks.NewMockStorage(ctrl)
-			tt.setupMocks(mockLLM)
-
+			tt.setupMocks(mockStorage, mockLLM)
 			controller := controllers.NewController(mockStorage, mockLLM)
 
 			router := gin.Default()
