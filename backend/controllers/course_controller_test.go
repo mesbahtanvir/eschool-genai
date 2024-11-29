@@ -31,7 +31,7 @@ func TestGenerateCourse(t *testing.T) {
 			name:       "Success",
 			courseHint: "AI",
 			setupMocks: func(mockLLM *mocks.MockLLM) {
-				mockLLM.EXPECT().GenerateCourseBlueprint("AI").Return(&models.CourseBlueprint{Title: "Intro to AI"}, nil)
+				mockLLM.EXPECT().GenerateCourseBlueprint("AI", "Prior Knowledge").Return(&models.CourseBlueprint{Title: "Intro to AI"}, nil)
 			},
 			expectedCode: http.StatusOK,
 			expectedBody: map[string]interface{}{
@@ -49,7 +49,7 @@ func TestGenerateCourse(t *testing.T) {
 			name:       "LLM Failure",
 			courseHint: "AI",
 			setupMocks: func(mockLLM *mocks.MockLLM) {
-				mockLLM.EXPECT().GenerateCourseBlueprint("AI").Return(nil, errors.New("failed"))
+				mockLLM.EXPECT().GenerateCourseBlueprint("AI", "Prior Knowledge").Return(nil, errors.New("failed"))
 			},
 			expectedCode: http.StatusInternalServerError,
 			expectedBody: map[string]interface{}{
