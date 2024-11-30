@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "./SearchBar.css";
+import { TextField, Button, Box, Container, Typography } from "@mui/material";
 import CourseBlueprint from "./CourseBlueprint";
 
 function SearchBar() {
@@ -25,19 +25,36 @@ function SearchBar() {
   };
 
   return (
-    <div className="search-container">
-      <input
-        type="text"
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        placeholder="Enter your search query..."
-        className="search-input"
-      />
-      <button onClick={handleSearch} className="search-button">
-        Search
-      </button>
-      {result && <CourseBlueprint data={result} />}
-    </div>
+    <Container maxWidth="sm">
+      <Box marginY={4}>
+        <Typography variant="h5" align="center" gutterBottom>
+          Search for a Course
+        </Typography>
+        <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
+          <TextField
+            label="Search Query"
+            variant="outlined"
+            fullWidth
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <Button variant="contained" color="primary" onClick={handleSearch}>
+            Search
+          </Button>
+        </Box>
+      </Box>
+      <Box marginTop={4}>
+        {result ? (
+          typeof result === "string" ? (
+            <Typography color="error" align="center">
+              {result}
+            </Typography>
+          ) : (
+            <CourseBlueprint courseId={result.course_id} />
+          )
+        ) : null}
+      </Box>
+    </Container>
   );
 }
 
