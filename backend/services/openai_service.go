@@ -44,7 +44,8 @@ func (oas OpenAIService) GenerateCourseBlueprint(courseHint string, userKnowledg
 		Model: openai.F(openai.ChatModelGPT4o),
 	})
 	if err != nil {
-		panic(err.Error())
+		log.Printf(err.Error())
+		return nil, err
 	}
 	content := chatCompletion.Choices[0].Message.Content
 

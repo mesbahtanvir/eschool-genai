@@ -3,6 +3,8 @@ package storage
 import (
 	"backend/models"
 	"context"
+	"fmt"
+	"log"
 	"os"
 	"time"
 
@@ -31,6 +33,10 @@ type MongoDatabaseHandler struct {
 
 func NewMustMongoDatabaseHandler() MongoDatabaseHandler {
 	uri := os.Getenv("MONGO_URI")
+	if uri == "" {
+		fmt.Println("MONGO_URI environment variable is not set")
+		panic("MONGO_URI is not set")
+	}
 	dbName := os.Getenv("DB_NAME")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -39,6 +45,10 @@ func NewMustMongoDatabaseHandler() MongoDatabaseHandler {
 	var err error
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
 	if err != nil {
+		log.Printf(err.Error())
+		panic(err)
+	}
+	if err := client.Ping(ctx, nil); err != nil {
 		panic(err)
 	}
 	return MongoDatabaseHandler{
@@ -53,6 +63,7 @@ func (mongo MongoDatabaseHandler) SaveCourse(course models.Course) error {
 
 	_, err := mongo.courseCollection.InsertOne(ctx, course)
 	if err != nil {
+		log.Printf(err.Error())
 		return err
 	}
 	return nil
@@ -74,6 +85,7 @@ func (mongo MongoDatabaseHandler) EnrollUserInCourse(userID, courseID string) er
 
 	_, err := mongo.userCollection.UpdateOne(ctx, filter, update)
 	if err != nil {
+		log.Printf(err.Error())
 		return err
 	}
 	return nil
@@ -86,6 +98,7 @@ func (mongo MongoDatabaseHandler) GetCourse(courseID string) (*models.Course, er
 	var course models.Course
 	err := mongo.courseCollection.FindOne(ctx, bson.M{"course_id": courseID}).Decode(&course)
 	if err != nil {
+		log.Printf(err.Error())
 		return nil, err
 	}
 	return &course, nil
@@ -105,6 +118,7 @@ func (mongo MongoDatabaseHandler) GetCourses(userID string) ([]models.Course, er
 
 	err := mongo.userCollection.FindOne(ctx, filter, options.FindOne().SetProjection(projection)).Decode(&userEnrollment)
 	if err != nil {
+		log.Printf(err.Error())
 		return nil, err // Return error if user is not found or query fails
 	}
 
@@ -117,6 +131,7 @@ func (mongo MongoDatabaseHandler) GetCourses(userID string) ([]models.Course, er
 	courseFilter := bson.M{"course_id": bson.M{"$in": userEnrollment.EnrolledCourses}} // Match courses in the array
 	cursor, err := mongo.courseCollection.Find(ctx, courseFilter)
 	if err != nil {
+		log.Printf(err.Error())
 		return nil, err // Return error if query fails
 	}
 	defer cursor.Close(ctx)
@@ -126,6 +141,7 @@ func (mongo MongoDatabaseHandler) GetCourses(userID string) ([]models.Course, er
 	for cursor.Next(ctx) {
 		var course models.Course
 		if err := cursor.Decode(&course); err != nil {
+			log.Printf(err.Error())
 			return nil, err // Return error if decoding fails
 		}
 		result = append(result, course)

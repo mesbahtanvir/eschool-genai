@@ -7,7 +7,7 @@ import (
 )
 
 func GetStructMetadata(s interface{}) string {
-	return getStructMetadata(reflect.TypeOf(s), "", 5)
+	return getStructMetadata(reflect.TypeOf(s), "", 10)
 }
 
 func getStructMetadata(t reflect.Type, indent string, depth int) string {

@@ -6,12 +6,17 @@ services:
       - "27017:27017"
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_ROOT_PASSWORD: s0dfsaiug345
+    networks:
+      - app-network
 
   backend:
     build:
       context: ./backend
     container_name: backend
+    environment:
+      MONGO_URI: mongodb://root:s0dfsaiug345@mongodb:27017
+      DB_NAME: "eschoolgenai"
     ports:
       - "8080:8080"
     env_file:
