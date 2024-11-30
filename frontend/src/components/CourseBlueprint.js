@@ -14,13 +14,18 @@ export const CourseBlueprint = ({ data }) => {
         <Typography variant="h4" align="center" gutterBottom>
           {title}
         </Typography>
-        <Typography variant="body1" color="textSecondary" paragraph>
+        <Typography
+          variant="body1"
+          color="textSecondary"
+          align="center"
+          component
+        >
           {description}
         </Typography>
       </Box>
 
       <Box>
-        <Typography variant="h5" gutterBottom>
+        <Typography variant="h5" align="center" gutterBottom>
           Course Modules
         </Typography>
         <Grid2 container spacing={2}>
@@ -28,9 +33,15 @@ export const CourseBlueprint = ({ data }) => {
             <Grid2 item xs={12} key={i}>
               <Paper elevation={2}>
                 <Box padding={2}>
-                  <Typography variant="h6">{module.title}</Typography>
+                  <Typography variant="h6" align="left">
+                    {module.title}
+                  </Typography>
                   {module.description && (
-                    <Typography variant="body2" color="textSecondary">
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      align="left"
+                    >
                       {module.description}
                     </Typography>
                   )}
@@ -42,7 +53,7 @@ export const CourseBlueprint = ({ data }) => {
       </Box>
 
       <Box textAlign="center" marginTop={4}>
-        <CourseEnroll />
+        <CourseEnroll courseId={data.courseId} />
       </Box>
     </Container>
   );

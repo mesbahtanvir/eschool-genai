@@ -50,7 +50,7 @@ function SearchBar() {
               {result}
             </Typography>
           ) : (
-            <CourseBlueprint courseId={result.course_id} />
+            <CourseBlueprint data={result} />
           )
         ) : null}
       </Box>
