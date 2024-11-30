@@ -63,6 +63,21 @@ func (mr *MockStorageMockRecorder) GetCourse(courseID interface{}) *gomock.Call 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetCourse", reflect.TypeOf((*MockStorage)(nil).GetCourse), courseID)
 }
 
+// GetCourses mocks base method.
+func (m *MockStorage) GetCourses(couseID string) ([]models.Course, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetCourses", couseID)
+	ret0, _ := ret[0].([]models.Course)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetCourses indicates an expected call of GetCourses.
+func (mr *MockStorageMockRecorder) GetCourses(couseID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetCourses", reflect.TypeOf((*MockStorage)(nil).GetCourses), couseID)
+}
+
 // SaveCourse mocks base method.
 func (m *MockStorage) SaveCourse(course models.Course) error {
 	m.ctrl.T.Helper()

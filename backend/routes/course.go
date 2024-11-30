@@ -14,6 +14,7 @@ import (
 type Storage interface {
 	EnrollUserInCourse(userID string, courseID string) error
 	GetCourse(courseID string) (*models.Course, error)
+	GetCourses(userID string) ([]models.Course, error)
 	SaveCourse(course models.Course) error
 	UserKnowledge(userID string) (string, error)
 }
@@ -47,6 +48,7 @@ func (routerSetup RouterSetup) SetupCourseRoutes(router *gin.Engine) {
 	{
 		courseGroup.GET("/generate", routerSetup.controller.GenerateCourse)
 		courseGroup.POST("/enroll", routerSetup.controller.EnrollCourse)
-		courseGroup.GET("/get", routerSetup.controller.GetCourse)
+		courseGroup.GET("/course", routerSetup.controller.GetCourse)
+		courseGroup.GET("/courses", routerSetup.controller.GetCourses)
 	}
 }

@@ -14,6 +14,7 @@ import (
 type Storage interface {
 	EnrollUserInCourse(userID string, courseID string) error
 	GetCourse(courseID string) (*models.Course, error)
+	GetCourses(couseID string) ([]models.Course, error)
 	SaveCourse(course models.Course) error
 	UserKnowledge(userID string) (string, error)
 }
@@ -73,7 +74,10 @@ func (controller Controller) EnrollCourse(c *gin.Context) {
 	courseID := c.Query("course_id")
 
 	// Append courseID to user's enrolled courses in object storage
-	controller.storage.EnrollUserInCourse(userID, courseID)
+	err := controller.storage.EnrollUserInCourse(userID, courseID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to enroll user in course"})
+	}
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }
 
@@ -95,4 +99,16 @@ func (controller Controller) GetCourse(c *gin.Context) {
 
 	// Respond with the retrieved course
 	c.JSON(http.StatusOK, gin.H{"course": course})
+}
+
+func (controller Controller) GetCourses(c *gin.Context) {
+	userID := c.Query("user_id")
+	courses, err := controller.storage.GetCourses(userID)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Course not found"})
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve course"})
+	}
+	c.JSON(http.StatusOK, gin.H{"courses": courses})
 }

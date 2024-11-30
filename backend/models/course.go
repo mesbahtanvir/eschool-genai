@@ -12,12 +12,12 @@ type Quiz struct {
 type Content struct {
 	Knowledge string `json:"knowledge"`
 	SubModule Module `json:"sub_module"`
-	Quiz      Quiz   `json:"Quiz"`
+	Quiz      Quiz   `json:"quiz"`
 }
 type Module struct {
 	Title       string    `json:"title"`
 	Explanation string    `json:"description"`
-	Content     []Content `json:"modules"`
+	Content     []Content `json:"content"`
 }
 
 type CourseBlueprint struct {
