@@ -17,5 +17,6 @@ User want to learn about something
 - `Fractional Information`: A small piece of information that can be meaninfully presented to the user.
 - `Knowledge Test`: A `quiz`/`puzzle`/`interactive game` to test user understanding about a `Fractional Information` related to the `Interest` which has already been presented to the user
 - `Pre Existing Knowledge Test`: A `quiz`/`puzzle`/`interactive game` to test user understanding about a `Fractional Information` related to the `Interest` which has _not_ yet been presented to the user
+- `Optimally`: Optimal strategy are the strategy where user observe low cognitive fatigue, high engagement to achieve their desired outcome in minimal time.
 
 - `Learning Track`: A product to help user to optimally obtain their desired `Outcome` on the `Interest`, considering their `Pre Existing Knowledge`.
