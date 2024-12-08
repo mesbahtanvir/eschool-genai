@@ -1,49 +1,71 @@
-### Build
+# Learning Track
 
-`docker compose build`
+Learning should be fun and effective, there is opportunity to improve learning experience.
 
-### Run Docker Service
-
-`docker compose up -d`
+## The Product
 
 ### Problem that we are trying to solve
 
-User want to learn about something, we would like to provide tool to help user learn faster, effectively
+User want to learn about something, we would like to provide tool to help user learn faster and effectively.
 
-### Prompt Engineering
+## Development
 
-Given The Definition
+### Local Setup
 
-DEFINITION_START_HERE
+Requirements
 
-- `Concept`/`Fact`/`Event`: Concept: Some abstract idea including math, science. Fact: Something that can be proved based on some concrete event Event: Something that already taken place and historically accurate.
-- `Interest`: The `concept`/`fact`/`event` user want to learn. For example, User might want to improve their Linear Algebra understanding, learn basic 3D geometry, World War 1 (WWI) or World Ward 2 (WWII)
-- `Outcome`: The end goal of user for the `Interest`. For example, user want to achieve sufficient knowledge on WWI to understand current global politics, Pass GRE/IETLS with certain score.
-- `Pre-existing Knowledge`: What user already know about the `Interest`. For example user want to learn Linear Algebra(LA), User already know about basic matrix operation, basic understanding on food and nutrition. The `Pre-existing knowledge` here is basic matrix operation as this is the only information that is related to LA.
-- `Fractional Information`: A small piece of information that can be meaninfully presented to the user.
-- `Quiz`: Some form of test, where a question will be asked and some option will be provided where only only option answer the question. The Goal of `Quiz` is to understand user's understanding of the Fractional Information/Interest
-- `Puzzle`: A form of brain teaser, visual or text based, where user has to use their cognitive ability to solve it.
-- `Interactive Game`: A text based game designed to reinformation knowledge or improve cognitive ability.
-- `Knowledge Test`: A `Quiz`/`puzzle`/`Interactive Game` to test user understanding about a `Fractional Information` related to the `Interest` which has already been presented to the user
-- `Pre-existing Knowledge Test`: A `quiz`/`puzzle`/`interactive game` to test user understanding about a `Fractional Information` related to the `Interest` which has _not_ yet been presented to the user
-- `Test`: Either `Knowledge Test` or `Pre-existing Knowledge Test`
-- `Optimally`: Optimal strategy are the strategy where user observe low cognitive fatigue, high engagement to achieve their desired outcome in minimal time.
-- `Learning Track`: A product to help user to optimally obtain their desired `Outcome` on the `Interest`, considering their `Pre Existing Knowledge`.
+- Docker
+- OPEN AI Account
 
-DEFINITION_END_HERE
+Export OpenAI API Key
 
-User's Interest
+```
+export OPENAI_API_KEY="YOUR_OPEN_AI_API_KEY"
+```
 
---- ATTACH USER INTEREST HERE ---
+Before executing these make sure docker daemon is up and running.
 
-User's Pre-existing Knowledge
+```
+docker compose build
+docker compose up -d
+```
 
---- ATTACH PRE EXISTING KNOWLEDGE HERE ---
+Visit the locally deployed frontend and play around with it
 
-Given Current Learning Track State with User's Answer
+### Architecture
 
---- ATTACH CURRENT LEARNING TRACK STATE ---
+```
+Frontend (reactjs) --> Backend(golang)  --> LLM
+                                       |
+                                       |
+                                        --> MongoDB
+```
 
-Analyze The given information and determine should user need new Fractional Information or Test.
+#### Frontend
 
-Now present new `Fractional Information`/`Quiz` to help achieve `Outcome` Considering Pre Existing User knowledge provided above.
+Frontend has to be very light weight and clutter free. on left panel it will list down all the current track the user has in progress. once clicked on one of the listed track. It will show last few course content and will have a button named "Advance". Once clicked on Advance button it will show next information.
+
+#### Backend
+
+The backend will have three specific role in the system.
+
+1. Facilitate storing & retriving user data generated in this system.
+2. Facilitate retriving user data generated in external sources.
+3. Generate Appropiate [prompt](./PROMPT.md) for the LLM
+
+#### LLM
+
+Generator of new content based on existing information about user. At this day, LLM might not be good at doing what we need. But we hope eventually LLM will improve and be better at this.
+
+#### MongoDB
+
+Storing users data, course and other stuff.
+
+Here how it works.
+
+- User want to learn about Linear Algebra, user put `Linear Algebra` as input in the search bar.
+- Backend receive the string `Linear Algebra`.
+- Backend retrive all the user data related to Linear Algebra
+- Backend create a [prompt](./PROMPT.md), example prompt `Here what I know about Linear Algebra, %ALL_THE_DATA_USER_KNOW_ABOUT_LINEAR_ALGEBRA_AS_STRING%. Create a Learning Track Preview where I know to pass Linear Algebra exam. The preview should Contain Title, Subtitle, List of topics the Learning track will cover` and send it to LLM
+- Backend Store the response and send it to User.
+- User select the learning Track and the Journey Begins
