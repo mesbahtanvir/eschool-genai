@@ -8,18 +8,7 @@
 
 ### Problem that we are trying to solve
 
-User want to learn about something
-
-- `Concept`/`Fact`/`Event`: This is self explanatory.
-- `Interest`: The `concept`/`fact`/`event` user want to learn. For example, User might want to improve their Linear Algebra understanding, learn basic 3D geometry, WWI or WWII
-- `Outcome`: The end goal of user for the Interest. For example, user want to achieve sufficient knowledge on WWI to understand current global politics, Pass GRE/IETLS with certain score.
-- `Pre Existing Knowledge`: What user already know about the `Interest`. For example user want to learn Linear Algebra(LA), User already know about basic matrix operation, basic understanding on food and nutrition. The Prexisting knowledge here is basic matrix operation as this is the only pre-existing knowlege that is related to LA.
-- `Fractional Information`: A small piece of information that can be meaninfully presented to the user.
-- `Knowledge Test`: A `quiz`/`puzzle`/`interactive game` to test user understanding about a `Fractional Information` related to the `Interest` which has already been presented to the user
-- `Pre Existing Knowledge Test`: A `quiz`/`puzzle`/`interactive game` to test user understanding about a `Fractional Information` related to the `Interest` which has _not_ yet been presented to the user
-- `Optimally`: Optimal strategy are the strategy where user observe low cognitive fatigue, high engagement to achieve their desired outcome in minimal time.
-
-- `Learning Track`: A product to help user to optimally obtain their desired `Outcome` on the `Interest`, considering their `Pre Existing Knowledge`.
+User want to learn about something, we would like to provide tool to help user learn faster, effectively
 
 ### Prompt Engineering
 
@@ -37,9 +26,24 @@ DEFINITION_START_HERE
 - `Interactive Game`: A text based game designed to reinformation knowledge or improve cognitive ability.
 - `Knowledge Test`: A `Quiz`/`puzzle`/`Interactive Game` to test user understanding about a `Fractional Information` related to the `Interest` which has already been presented to the user
 - `Pre-existing Knowledge Test`: A `quiz`/`puzzle`/`interactive game` to test user understanding about a `Fractional Information` related to the `Interest` which has _not_ yet been presented to the user
+- `Test`: Either `Knowledge Test` or `Pre-existing Knowledge Test`
 - `Optimally`: Optimal strategy are the strategy where user observe low cognitive fatigue, high engagement to achieve their desired outcome in minimal time.
 - `Learning Track`: A product to help user to optimally obtain their desired `Outcome` on the `Interest`, considering their `Pre Existing Knowledge`.
 
 DEFINITION_END_HERE
 
-1. Present new `Factional Information` to achieve `Outcome`
+User's Interest
+
+--- ATTACH USER INTEREST HERE ---
+
+User's Pre-existing Knowledge
+
+--- ATTACH PRE EXISTING KNOWLEDGE HERE ---
+
+Given Current Learning Track State with User's Answer
+
+--- ATTACH CURRENT LEARNING TRACK STATE ---
+
+Analyze The given information and determine should user need new Fractional Information or Test.
+
+Now present new `Fractional Information`/`Quiz` to help achieve `Outcome` Considering Pre Existing User knowledge provided above.
